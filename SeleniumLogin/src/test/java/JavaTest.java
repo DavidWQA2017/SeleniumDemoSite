@@ -1,8 +1,10 @@
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 /**
@@ -14,19 +16,22 @@ public class JavaTest
     WebDriver webDriver;
 
     @Test
-    public void test() {
-        webDriver.navigate().to("TheDemoSite.co.uk");
-        //webDriver.findElement(By.cssSelector("li.navigation-list-item:nth-child(2) > div:nth-child(1)")).click();
+    public void test()
+    {
+        //create user for test
+        webDriver.navigate().to("http://www.thedemosite.co.uk/addauser.php");
+        webDriver.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/form/div/center/table/tbody/tr/td[1]/div/center/table/tbody/tr[1]/td[2]/p/input")).sendKeys("usertest");
+        webDriver.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/form/div/center/table/tbody/tr/td[1]/div/center/table/tbody/tr[2]/td[2]/p/input")).sendKeys("usertest");
+        webDriver.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/form/div/center/table/tbody/tr/td[1]/div/center/table/tbody/tr[3]/td[2]/p/input")).click();
 
-        //try {
-        //  Thread.sleep(10000);
-        //webDriver.wait(1000);
-        //} catch (InterruptedException e) {
-        // e.printStackTrace();
-        //  }
-        //webDriver.findElement(By.cssSelector("article.promocard:nth-child(1) > div:nth-child(2) > ul:nth-child(1) > li:nth-child(1) > a:nth-child(1)")).click();
+        //input login
+        webDriver.navigate().to("http://www.thedemosite.co.uk/login.php");
+        webDriver.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/form/div/center/table/tbody/tr/td[1]/table/tbody/tr[1]/td[2]/p/input")).sendKeys("usertest");
+        webDriver.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/form/div/center/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/p/input")).sendKeys("usertest");
+        webDriver.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/form/div/center/table/tbody/tr/td[1]/table/tbody/tr[3]/td[2]/p/input")).click();
 
-
+        //check login is successful
+        Assert.assertEquals("Login successful","**Successful Login**", webDriver.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/big/blockquote/blockquote/font/center/b")).getText());
     }
 
     @After
@@ -37,12 +42,9 @@ public class JavaTest
 
 
     @Before
-    public void before() {
-        /*ChromeOptions options = new ChromeOptions();
-        options.setBinary("C:\\Users\\Administrator\\IdeaProjects\\junittesting\\chromedriver.exe");*/
-        //System.setProperty("webdriver.chrome.driver","C:\\Users\\Administrator\\IdeaProjects\\junittesting\\src\\chromedriver.exe");
-        webDriver = new FirefoxDriver();
-        //System.out.println("before");
+    public void before()
+    {
+        webDriver = new ChromeDriver();
     }
 
 }
