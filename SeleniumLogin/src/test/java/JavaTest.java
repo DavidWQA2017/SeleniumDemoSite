@@ -1,11 +1,13 @@
 import com.google.common.base.Function;
 import org.junit.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.Mouse;
+import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
@@ -16,6 +18,7 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 //import java.util.function.Function;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -35,6 +38,8 @@ public class JavaTest
     private static ExtentReports report;
     private static ExtentTest test;
     private static ExtentTest test2;
+    private static ExtentTest test3;
+
     private static String reportFilePath = "C:\\Users\\Administrator\\IdeaProjects\\SeleniumLogin\\report.html";
 
     @Test
@@ -107,7 +112,8 @@ public class JavaTest
     @Test
     public void LoginFail_Test()
     {
-        String filename = "ScreenShotTest1";
+
+        String filename = "ScreenShotTest2";
         String[] spreadsheetInfo = new String[4];
         int i = 0;
 
@@ -149,7 +155,7 @@ public class JavaTest
         try
         {
             Screenshot.take(webDriver, filename);
-            test2.addScreenCaptureFromPath("C:\\Users\\Administrator\\IdeaProjects\\SeleniumLogin\\IAMAFILE2.jpg");
+            test2.addScreenCaptureFromPath("C:\\Users\\Administrator\\IdeaProjects\\SeleniumLogin\\ScreenshotTest2.jpg");
             test2.log(Status.INFO, "a screenshot of the login attempt has been created  ");
         }
         catch (IOException e)
@@ -168,6 +174,31 @@ public class JavaTest
         {
             test2.log(Status.FAIL, "could not login" );
         }
+
+    }
+
+    @Test
+    public void Draggable_Test ()
+    {
+
+        webDriver.manage().window().maximize();
+        webDriver.navigate().to("http://demoqa.com");
+        webDriver.findElement(By.cssSelector("#menu-item-140")).click();
+        ; //thing to be dragged
+        Actions builder = new Actions(webDriver);
+        Point location = wait.until(webDriver1 ->  webDriver.findElement(By.cssSelector("#draggable")).getLocation());
+        System.out.println("before movement x is " + location.getX());
+        System.out.println("before movement y is "  + location.getY());
+        //Point p = MouseInfo.getPointerInfo().getLocation();
+
+
+        System.out.println();
+        builder.moveToElement(webDriver.findElement(By.cssSelector("#draggable"))).clickAndHold().moveByOffset(360,0).release().build().perform();
+        location = wait.until(webDriver1 ->  webDriver.findElement(By.cssSelector("#draggable")).getLocation());
+        System.out.println("before movement x is " + location.getX());
+        System.out.println("before movement y is "  + location.getY());
+
+        Assert.assertEquals(935, location.getX());
 
     }
 
@@ -198,6 +229,7 @@ public class JavaTest
         report.attachReporter(extentHtmlReporter);
         test = report.createTest("TestName");
         test2 = report.createTest("TestName");
+        test3 = report.createTest("TestName");
     }
 
 
