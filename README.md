@@ -1,0 +1,2 @@
+# SeleniumDemoSite
+Automated testing basics
